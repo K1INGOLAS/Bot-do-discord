@@ -1,5 +1,12 @@
 import discord
+import os
 from discord.ext import commands
+from discord import app_commands
+from dotenv import load_dotenv
+
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
+
 
 class TabelaBot(commands.Bot): 
     def __init__(self):
@@ -133,4 +140,11 @@ async def blue(interaction: discord.Interaction):
 
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
-bot.run("TOKEN")
+# Comando de Bobux
+@bot.tree.command(name="bobux", description="calcula a quantidade de bobux a ser enviado")
+@app_commands.describe(bobux="Digite o valor de bobux")
+async def bobux(interaction: discord.Interaction, bobux: int):
+    valorPagar = (bobux/100) * 2.5
+    await interaction.response.send_message(f"💰 **{bobux}** bobux por apenas **R$ {valorPagar:.2f}**", ephemeral=True)
+
+bot.run(TOKEN)
