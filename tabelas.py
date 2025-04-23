@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class TabelaBot(commands.Bot):  # agora herda de commands.Bot
+class TabelaBot(commands.Bot): 
     def __init__(self):
         intents = discord.Intents.all()
         super().__init__(
@@ -10,13 +10,14 @@ class TabelaBot(commands.Bot):  # agora herda de commands.Bot
         )
     
     async def setup_hook(self):
-        await self.tree.sync()  # agora funciona!
+        await self.tree.sync()
 
     async def on_ready(self):
         print(f"O Bot {self.user} foi ligado com sucesso.")
 
 bot = TabelaBot()
 
+# Tabela do Blox Fruits
 @bot.tree.command(name="blox-fruits", description="Tabela com preços de Gamepasses e Frutas Permanentes")
 async def blox(interaction: discord.Interaction):
     embed = discord.Embed(
@@ -54,7 +55,7 @@ async def blox(interaction: discord.Interaction):
             "**Phoenix:** R$ 50,00 | **Sound:** R$ 47,50 | **Spider:** R$ 45,00\n"
             "**Love:** R$ 42,50 | **Buddha:** R$ 41,50 | **Quake:** R$ 37,50\n"
             "**Magma:** R$ 32,50 | **Ghost:** R$ 31,88 | **Ice:** R$ 18,75\n"
-            "**Dragon:** R$ 125,00 | **Gas:** R$ 62,50"
+            "**Dragon:** R$ 125,00 | **Gas:** R$ 62,50 | **Yeti:** R$ 75,00" 
         ),
         inline=False
     )
@@ -63,7 +64,8 @@ async def blox(interaction: discord.Interaction):
     embed.add_field(
         name="🔥 Novas Frutas",
         value=(
-            "**Eagle:** R$ 25,50\n"
+            "**Eagle Skin chromatic:** 12,50\n"
+            "**Eagle:** R$ 24,80\n"
             "**Creation:** R$ 43,75\n"
             "**Gravity:** R$ 57,50"
         ),
@@ -72,6 +74,7 @@ async def blox(interaction: discord.Interaction):
 
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
+# Tabela do Blue Lock Rivals
 @bot.tree.command(name="blue_lock_rivals", description="Tabela com todas as gamepass importantes")
 async def blue(interaction: discord.Interaction):
     embed = discord.Embed(
@@ -80,7 +83,7 @@ async def blue(interaction: discord.Interaction):
         color=discord.Color.blue()
     )
 
-    # Gamepass
+    # Gamepass da loja
     embed.add_field(
         name="🛍️ Loja do jogo",
         value=(
@@ -96,6 +99,7 @@ async def blue(interaction: discord.Interaction):
         inline=False
     )
 
+    # Slots de estilo e Flow
     embed.add_field(
         name="➕Slot de estilo",
         value=(
@@ -108,7 +112,7 @@ async def blue(interaction: discord.Interaction):
     )
 
     embed.add_field(
-        name="⚡Slot de estilo",
+        name="⚡Slot de Flow",
         value=(
             "**Slot 2:** R$ 3,75\n"
             "**Slot 3:** R$ 7,50\n"
