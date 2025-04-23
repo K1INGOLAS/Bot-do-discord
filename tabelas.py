@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-# teste
-
 
 class TabelaBot(commands.Bot):  # agora herda de commands.Bot
     def __init__(self):
