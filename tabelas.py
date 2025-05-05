@@ -25,7 +25,7 @@ class TabelaBot(commands.Bot):
 bot = TabelaBot()
 
 # Tabela do Blox Fruits
-@bot.tree.command(name="blox-fruits", description="Tabela com preços de Gamepasses e Frutas Permanentes")
+@bot.tree.command(name="blox_fruits", description="Tabela com preços de Gamepasses e Frutas Permanentes")
 async def blox(interaction: discord.Interaction):
     embed = discord.Embed(
         title="🍍 Tabela de Preços - Blox Fruits",
@@ -62,19 +62,8 @@ async def blox(interaction: discord.Interaction):
             "**Phoenix:** R$ 50,00 | **Sound:** R$ 47,50 | **Spider:** R$ 45,00\n"
             "**Love:** R$ 42,50 | **Buddha:** R$ 41,50 | **Quake:** R$ 37,50\n"
             "**Magma:** R$ 32,50 | **Ghost:** R$ 31,88 | **Ice:** R$ 18,75\n"
-            "**Dragon:** R$ 125,00 | **Gas:** R$ 62,50 | **Yeti:** R$ 75,00" 
-        ),
-        inline=False
-    )
-
-    # Frutas Adicionais
-    embed.add_field(
-        name="🔥 Novas Frutas",
-        value=(
-            "**Eagle Skin chromatic:** 12,50\n"
-            "**Eagle:** R$ 24,80\n"
-            "**Creation:** R$ 43,75\n"
-            "**Gravity:** R$ 57,50"
+            "**Dragon:** R$ 125,00 | **Gas:** R$ 62,50 | **Yeti:** R$ 75,00\n"
+            "Eagle:** R$ 24,80 | **Creation:** R$ 43,75 |" 
         ),
         inline=False
     )
@@ -96,12 +85,12 @@ async def blue(interaction: discord.Interaction):
         value=(
             "**Emotes toxic:** R$ 5,00\n"
             "**Vip:** R$ 12,50\n"
-            "**Roupas de despertar:** R$ 2,25\n"
-            "**Emoções de anime:** R$ 6,00\n"
-            "**Som de gol:** R$ 2,25\n"
-            "**Som de quebrador de ankle:** R$ 2,25\n" 
+            "**Roupas de despertar:** R$ 3,75\n"
+            "**Emoções de anime:** R$ 10,00\n"
+            "**Som de gol:** R$ 3,75\n"
+            "**Som de quebrador de tornozelo:** R$ 3,75\n" 
             "**Pulo de giro:** R$ 2,50\n"
-            "**Servidor Privado+:** R$ 1,50"
+            "**Servidor Privado+:** R$ 2,50"
         ),
         inline=False
     )
@@ -140,11 +129,51 @@ async def blue(interaction: discord.Interaction):
 
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
+# Tabela de bobux
+@bot.tree.command(name="bobux", description="Tabela de preço de bobux")
+async def bobux(interaction: discord.Interaction):
+
+    embed = discord.Embed(
+        title="💳 Tabela de bobux",
+        description="Lista dos preços de bobux",
+        color=discord.Color.purple()
+    )
+
+    embed.add_field(
+        name="💵 Valores de bobux",
+        value=(
+            "**50 bobux:** R$ 1,25\n"
+            "**100 bobux:** R$ 2,50\n"
+            "**400 bobux:** R$ 10,00\n"
+            "**500 bobux:** R$ 12,50\n"
+            "**1000 bobux:** R$ 25,00"
+        )
+    )
+    
+
+    await interaction.response.send_message(embed=embed, ephemeral=True)
+
+
+# Verificador de admin
+def eh_adm(Interaction: discord.Interaction) -> bool:
+    return Interaction.user.guild_permissions.administrator
+
 # Comando de Bobux
-@bot.tree.command(name="bobux", description="calcula a quantidade de bobux a ser enviado")
-@app_commands.describe(bobux="Digite o valor de bobux")
-async def bobux(interaction: discord.Interaction, bobux: int):
+@app_commands.check(eh_adm)
+@bot.tree.command(name="admbobux", description="ADM") #calcula a quantidade de bobux a ser enviado
+@app_commands.describe(bobux="Digite quantos bobux:")
+async def bobuxADM(interaction: discord.Interaction, bobux: int):
     valorPagar = (bobux/100) * 2.5
     await interaction.response.send_message(f"💰 **{bobux}** bobux por apenas **R$ {valorPagar:.2f}**", ephemeral=True)
+
+# Mensagem de erro para quem não tem permissão
+@bobuxADM.error
+async def on_app_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
+    if isinstance(error, app_commands.CheckFailure):
+        await interaction.response.send_message("🚫 Você não tem permissão para usar esse comando!", ephemeral=True)
+    else:
+        await interaction.response.send_message("⚠️ Ocorreu um erro ao executar o comando.", ephemeral=True)
+
+bot.tree.on_error = on_app_command_error
 
 bot.run(TOKEN)
